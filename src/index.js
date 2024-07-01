@@ -3,12 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom'
+import { initFacebookSdk, jwtInterceptor, errorInterceptor, history } from './helpers';
+// enable interceptors for http requests
+// jwtInterceptor();
+errorInterceptor();
 
+// wait for facebook sdk before startup
+initFacebookSdk();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <BrowserRouter>
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

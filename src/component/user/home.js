@@ -16,13 +16,15 @@ function Home() {
         setMounted(true);
         async function getPages() {
             let influencer_id = localStorage.getItem('influencer_id')
-            let account = await axios.get(`${baseUrl}/api/facebook/page_list?influencer_id=${influencer_id}`);
-            setAccounts(account.data.result);
-            let pages = []
-            account.data.result.facebook.forEach(element => {
-                pages.push({value:element.id+'-'+element.oauth_token,label:element.name})
-            });
-            setOptions(pages)
+            if(influencer_id){
+                let account = await axios.get(`${baseUrl}/api/facebook/page_list?influencer_id=${influencer_id}`);
+                setAccounts(account.data.result);
+                let pages = []
+                account.data.result.facebook.forEach(element => {
+                    pages.push({value:element.id+'-'+element.oauth_token,label:element.name})
+                });
+                setOptions(pages)
+            }
         }
         getPages();
         
@@ -80,11 +82,32 @@ function Home() {
                     </React.Fragment>
                     </td>
                     </tr>
+                    <table className="table table-striped">
+                <thead>
                     <tr>
-                        <td colspan="4">
-                            Page Info: {pageData}
-                        </td>
+                        <th>Name</th>
+                        <th>Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {pageData && pageData.map(account =>
+                        <tr key={account.id}>
+                            <td>{account.title}</td>
+                            <td>
+                            <tbody>
+                    {account && account.values.map(val =>
+                        <tr>
+                            <td>{val.end_time}</td>
+                            <td>----{val.value}
+                            </td>
                         </tr>
+                    )}
+                    </tbody>
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                    </table>
                 </tbody>
             </table>
         </div>
